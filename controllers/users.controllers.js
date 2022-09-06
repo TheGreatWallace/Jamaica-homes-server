@@ -14,6 +14,8 @@ const register = (req,res) => {
         let user = new User({
             username: req.body.username,
             password: hashedpassword,
+            email: req.body.email,
+            country: req.body.country,
             role: req.body.role
         })
         user.save()
@@ -23,7 +25,7 @@ const register = (req,res) => {
             })
         } ).catch(error => {
             res.json({ 
-                message: 'Error saving user'})
+                message: 'Error saving user', error})
         })
     })
 

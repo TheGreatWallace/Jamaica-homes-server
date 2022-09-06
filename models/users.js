@@ -4,10 +4,18 @@ const Schema = mongoose.Schema;
 //Define Collection and Schema
 
 
-let Users = new Schema({
+let Users =  Schema({
     
     username: {
         required: true,
+        type: String
+    },
+    email: {
+        required: true,
+        type: String
+    },
+    country: {
+        required: false,
         type: String
     },
     password: {
@@ -15,9 +23,9 @@ let Users = new Schema({
         type: String
     },
     role: {
-        required: true,
+        required: false,
         type: String,
-        enum: ['admin', 'user']
+        enum: ['Admin', 'User']
     }},{
         collection: 'users',
 })
