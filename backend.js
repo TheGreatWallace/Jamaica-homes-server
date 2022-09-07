@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const housesRoute = require('./routes/housesRoute');
 const usersRoute = require('./routes/usersRoute');
+const cookieParser = require('cookie-parser');
 const db = require('./models');
 require('dotenv/config')
 
@@ -25,6 +26,7 @@ db.mongoose
 
 
 //Express App
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 var corsOptions = {
@@ -35,7 +37,7 @@ app.use(cors(corsOptions));
 
 //Setting Route Middleware
 app.use('/api/Jamaica-Homes', housesRoute);
-app.use('/api/Jamaica-Homes', usersRoute);
+app.use('/api/Jamaica-Homes/user', usersRoute);
 
 // app.use(cookieParser());
 //  app.use(session({ 

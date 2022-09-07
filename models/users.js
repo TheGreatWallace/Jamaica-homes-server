@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 //Define Collection and Schema
 
 
-let Users =  Schema({
+let Users = new Schema({
     
     username: {
         required: true,
