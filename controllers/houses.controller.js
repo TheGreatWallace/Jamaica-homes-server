@@ -1,5 +1,6 @@
 const db = require('../models/index');
-const House = db.houses
+const House = db.houses;
+const upload = require('../middleware/file-upload');
 
 // Create and Save 
 exports.create = (req,res) => {

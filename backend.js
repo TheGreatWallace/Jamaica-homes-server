@@ -6,6 +6,8 @@ const housesRoute = require('./routes/housesRoute');
 const usersRoute = require('./routes/usersRoute');
 const cookieParser = require('cookie-parser');
 const db = require('./models');
+const multer = require('multer');
+const fs = require('fs')
 require('dotenv/config')
 
 
@@ -25,8 +27,30 @@ db.mongoose
   });
 
 
+
+  //Multer Setup
+  const storage = multer.diskStorage({
+    destination : function (req,file,cb) {
+        if(!fs.existsSync(__dirname+'/temp'))
+        {
+            fs.mkdirSync(__dirname+'/temp')
+        }
+        cb(null , './temp')
+    },
+    filename : function(req,file,cb) {
+        cb(null , file.houseImage );
+    }
+})
+
+const upload = multer({storage : storage})
+
+app.get('/upload' , upload.single('file') , async(req,res)=> {
+  console.log('Files=====>' , req.file)
+  res.json({status : 'ok' , data : req.files})
+})
+
 //Express App
-app.use(cookieParser());
+app.use(cookieParser('secREt$#code$%3245'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 var corsOptions = {
@@ -36,8 +60,8 @@ app.use(cors(corsOptions));
 
 
 //Setting Route Middleware
-app.use('/api/Jamaica-Homes', housesRoute);
-app.use('/api/Jamaica-Homes/user', usersRoute);
+app.use('/api/v1/houses', housesRoute);
+app.use('/api/v1/users', usersRoute);
 
 // app.use(cookieParser());
 //  app.use(session({ 

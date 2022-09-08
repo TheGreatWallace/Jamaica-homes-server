@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../models/index');
+const users = require('../models/users');
 const User = db.users;
 
 const register = (req,res) => {
@@ -35,9 +36,8 @@ const register = (req,res) => {
 const login = (req,res) => {
     var username = req.body.username;
     var password = req.body.password;
-    var email = req.body.email;
-
-    User.findOne({username: username, role: req.body.role } || {email: email, role: req.body.role })
+    const expiration = 5 * 60;
+    User.findOne({username: username})
     .then(user => {
         if(user){
             bcrypt.compare(password, user.password, function(err, result) {
@@ -47,11 +47,14 @@ const login = (req,res) => {
                     })
                 }
                 if(result){
-                    let token = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'})
-                    res.cookie('uid', user._id, { expiresIn: '2h' })
+                    let token = jwt.sign({_id: user._id}, 'verySecretValue', {expiresIn: expiration})
+                    res.cookie('uid', user._id, { expiresIn: '1d', httpOnly: false, sameSite: 'none', secure: true, signed: true })
+                    user.password= undefined;
                     res.json({
-                        message: 'Login Successful!',
-                        token
+                        id: user._id,
+                        token,
+                        expiresIn: new Date(Date.now()+ expiration * 1000),
+                        user: user
                     })
                 }else {
                     res.json({
@@ -87,17 +90,18 @@ const getUsers = (req, res) => {
 
 const getUserById = (req,res) => {
    const id = req.params.id;
-
     User.findById(id)
     .then(user => {
         if(!user){
-            res.status(404).send({message: `User by id  ${id} not found.`});
+            res.status(404).send({message: `User by id  ${user} `});
+            // res.status(404).send({message: `User by id  ${id} not found.`});
         }else{
-            res.send(data)
+            res.send(user)
         }
     }).catch(err => {
         res.status(500).send({
-            message: "Error retrieving House with id=" + id 
+            message: err.message,
+            errMessage:"Error retrieving User with id=" + id 
         });
     })
 }
