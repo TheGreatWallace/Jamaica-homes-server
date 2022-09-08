@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/houses.controller');
-
+const uploads = require('../uploads');
 
 //Creates a new home
 router.post('/',controller.create);
@@ -20,6 +20,9 @@ router.put('/:id', controller.updateHouse);
 
 //Deletes a specific house
 router.delete('/:id', controller.deleteHouse);
+
+//Stores uploaded images
+router.post('/:id', uploads.single('image'), controller)
 
 
 module.exports = router;

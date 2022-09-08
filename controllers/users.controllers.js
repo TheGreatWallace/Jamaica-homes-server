@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../models/index');
-const users = require('../models/users');
 const User = db.users;
 
 const register = (req,res) => {
@@ -70,9 +69,9 @@ const login = (req,res) => {
     })
 }
 
-const logout = (req, res) => {
-    res.cookie('uid', user._id, { expiresIn: 0 })
-}
+// const logout = (req, res) => {
+//     res.cookie('uid', user._id, { expiresIn: 0 })
+// }
 
 const getUsers = (req, res) => {
     User.find(req.body)
@@ -129,4 +128,4 @@ const updateUser = (req, res) => {
      })
 }
 
-module.exports = {register, login, getUsers, getUserById, updateUser, logout}
+module.exports = {register, login, getUsers, getUserById, updateUser}
