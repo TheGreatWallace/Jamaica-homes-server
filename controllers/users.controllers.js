@@ -52,7 +52,7 @@ const login = (req,res) => {
                     res.json({
                         id: user._id,
                         token,
-                        expiresIn: new Date(Date.now()+ expiration * 1000),
+                        expiresIn: new Date(Date.now()+ expiration / 1000),
                         user: user
                     })
                 }else {

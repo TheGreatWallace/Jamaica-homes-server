@@ -25,7 +25,8 @@ let Users = new Schema({
     role: {
         required: false,
         type: String,
-        enum: ['Admin', 'User']
+        enum: ['Admin', 'User'],
+        default: 'User'
     }},{
         collection: 'users',
 })
